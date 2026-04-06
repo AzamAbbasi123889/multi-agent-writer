@@ -5,3 +5,12 @@ langgraph
 python-dotenv
 pydantic>=2.0.0
 langchain-groq
+flask
+flask-cors
+gunicorn
+gevent
+langchain-community
+groq
+google-generativeai
+httpx
+requests

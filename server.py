@@ -15,7 +15,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+@app.route("/", methods=["GET"])
+def index():
+    return jsonify({
+        "status": "Multi Agent Writer API is running!",
+        "version": "1.0",
+        "endpoints": ["/api/run", "/api/health"]
+    })
 
 # ─── Patched agents module with event emitter ──────────────────────────────
 # We monkey-patch print to also emit events over SSE during a run.
@@ -290,19 +298,52 @@ def run_pipeline():
     thread.start()
 
     def generate():
+        start_time = time.time()
         while True:
-            item = event_queue.get()
+            if time.time() - start_time > 110:
+                yield f"data: {json.dumps({'type': 'error', 'message': 'Pipeline timeout: 110 seconds exceeded'})}\n\n"
+                break
+                
+            try:
+                item = event_queue.get(timeout=1.0)
+            except queue.Empty:
+                continue
+                
             if item is None:
                 break
             yield f"data: {json.dumps(item)}\n\n"
 
     return Response(generate(), mimetype="text/event-stream",
-                    headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+                    headers={
+                        "Content-Type": "text/event-stream",
+                        "Cache-Control": "no-cache",
+                        "X-Accel-Buffering": "no",
+                        "Connection": "keep-alive",
+                        "Access-Control-Allow-Origin": "*"
+                    })
 
 
 @app.route("/api/health")
 def health():
-    return jsonify({"status": "ok", "models": {"primary": "llama-3.3-70b-versatile (Groq)", "fallback": "gemini-2.0-flash-exp"}})
+    google_key = os.getenv("GOOGLE_API_KEY", "")
+    tavily_key = os.getenv("TAVILY_API_KEY", "")
+    groq_key = os.getenv("GROQ_API_KEY", "")
+    
+    def mask_key(k):
+        return f"{k[:6]}..." if len(k) > 6 else "Missing"
+        
+    return jsonify({
+        "status": "ok", 
+        "models": {
+            "primary": "llama-3.3-70b-versatile (Groq)", 
+            "fallback": "gemini-2.0-flash-exp"
+        },
+        "keys": {
+            "google": mask_key(google_key),
+            "tavily": mask_key(tavily_key),
+            "groq": mask_key(groq_key)
+        }
+    })
 
 
 if __name__ == "__main__":
