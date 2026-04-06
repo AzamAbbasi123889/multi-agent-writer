@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent AI Writer</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Control Panel -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <i class="fa-solid fa-pen-nib"></i>
+                <h2>AgentWriter</h2>
+            </div>
+            
+            <div class="input-section">
+                <label for="topicInput">What should we write about?</label>
+                <div class="input-wrapper">
+                    <textarea id="topicInput" placeholder="Enter a topic... e.g., 'The Future of Electric Vehicles'"></textarea>
+                </div>
+                <button id="startBtn" class="primary-btn">
+                    <span class="btn-text">Start Writing Pipeline</span>
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </button>
+            </div>
+
+            <div class="system-status">
+                <h3>System Status</h3>
+                <div class="status-indicator">
+                    <span class="pulse"></span>
+                    <span id="connectionState">Ready</span>
+                </div>
+            </div>
+            
+            <div class="agent-legend">
+                <h3>Active Agents</h3>
+                <ul>
+                    <li class="agent-tag supervisor"><i class="fa-solid fa-sitemap"></i> Supervisor</li>
+                    <li class="agent-tag researcher"><i class="fa-solid fa-magnifying-glass"></i> Researcher</li>
+                    <li class="agent-tag writer"><i class="fa-solid fa-keyboard"></i> Writer</li>
+                    <li class="agent-tag reviewer"><i class="fa-solid fa-check-double"></i> Reviewer</li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Terminal / Event Log -->
+            <section class="events-panel glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-terminal"></i> Live Agent Activity</h3>
+                    <button id="clearLogsBtn" class="icon-btn" title="Clear Logs"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div class="terminal-content" id="terminal">
+                    <div class="log-entry system">Welcome to Multi-Agent Writer. Enter a topic to begin...</div>
+                </div>
+            </section>
+
+            <!-- Results Output -->
+            <section class="results-panel glass-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-file-lines"></i> Final Article</h3>
+                    <div class="revision-badge">
+                        <span id="revisionCountText">Round: 0</span>
+                    </div>
+                </div>
+                <div class="article-content" id="articleContent">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <p>The final article will appear here once the pipeline is complete.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals or Overlays can go here -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

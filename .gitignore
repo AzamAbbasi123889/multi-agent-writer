@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+env/
+.pytest_cache/
+
+# Node (Frontend)
+client/node_modules/
+client/dist/
+client/.vite/
+.npm/
+
+# Logs & Results
+*.log
+full_pipeline_results*.txt
+check_results*.txt
+results.txt
+test_final.txt
+full_pipeline_results_v3.txt
+
+# OS
+.DS_Store
+Thumbs.db

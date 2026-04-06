@@ -1,0 +1,7 @@
+langchain
+langchain-google-genai
+langchain-tavily
+langgraph
+python-dotenv
+pydantic>=2.0.0
+langchain-groq
